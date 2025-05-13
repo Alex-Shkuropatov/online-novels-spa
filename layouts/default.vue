@@ -33,9 +33,9 @@
     <slot />
    </b-div>
   </template>
-  <template #footer>
-   <ShareFooter />
-  </template>
+<!--  <template #footer>-->
+<!--   <ShareFooter />-->
+<!--  </template>-->
  </PageLayout>
 </template>
 

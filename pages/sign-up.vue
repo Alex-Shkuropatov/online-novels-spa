@@ -1,5 +1,5 @@
 <template>
-  <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
       <div class="text-center mb-4">
         <i class="bi bi-person-plus fs-1 text-primary"></i>

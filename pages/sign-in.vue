@@ -1,5 +1,5 @@
 <template>
-  <div class="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-site">
+  <div class="min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <b-card class="w-100 shadow-sm border-0 px-3 py-4 card-bg" style="max-width: 380px">
       <div class="text-center mb-3">
         <b-icon icon="person-circle" font-scale="2.5" class="text-primary" />
