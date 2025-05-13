@@ -2,7 +2,7 @@
   <Navbar
       expand="lg"
       sticky="top"
-      background-color="primary"
+      background-color="primary-subtle"
   >
     <Container
         type="xl"
@@ -14,7 +14,7 @@
           margin="0 e-2 s-md-3 s-xl-0"
       >
         <img
-            src="~/assets/img/logo3.svg"
+            src="~/assets/img/noveluna1.PNG"
             alt="use-bootstrap"
             height="30"
         >
