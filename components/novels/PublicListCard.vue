@@ -17,7 +17,7 @@
 <script setup>
 defineProps({
   novel: Object,
-})
+});
 </script>
 
 <style lang="scss" scoped>

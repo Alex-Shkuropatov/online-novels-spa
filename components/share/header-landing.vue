@@ -19,10 +19,10 @@
     <NavbarNavList margin="e-auto">
      <NavItem>
       <NavLink
-       to="/docs"
+       to="/"
        padding="x-0 x-lg-2"
       >
-       Docs
+       Главная
       </NavLink>
      </NavItem>
      <NavItemDropdown>
@@ -96,37 +96,9 @@
       </DropdownMenu>
      </NavItemDropdown>
     </NavbarNavList>
-    <NavbarNavList
-     flex-direction="row"
-     flex-wrap="wrap"
-     margin="s-md-auto"
-    >
-     <NavItem
-      padding="y-2"
-      col="12 lg-auto"
-     >
-      <Vr
-       display="none lg-flex"
-       relative-height="100"
-       margin="x-lg-2"
-       text-color="black-50"
-      />
-      <hr class="d-lg-none my-2 text-black-50">
-     </NavItem>
-     <NavItem col="6 lg-auto">
-      <NavLink
-       pdding="y-2 x-0 x-lg-2"
-       to="https://github.com/simplise/use-bootstrap"
-       target="_blank"
-       rel="noopener"
-      >
-       <Icon
-        name="bi:github"
-        class="navbar-nav-svg"
-       />
-      </NavLink>
-     </NavItem>
-    </NavbarNavList>
+     <NuxtLink to="/sign-in" class="btn btn-outline-primary">
+       Авторизоваться
+     </NuxtLink>
    </NavbarCollapse>
   </Container>
  </Navbar>

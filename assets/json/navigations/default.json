@@ -1,16 +1,12 @@
 [
     {
-        "name": "Getting started",
+        "name": "Online Novels",
         "icon": "bi:book-half",
         "color": "indigo",
         "children": [
             {
-                "name": "Introduction",
-                "path": "/docs"
-            },
-            {
-                "name": "Localization",
-                "path": "/lang-[lang]/localization"
+                "name": "Главная",
+                "path": "/"
             }
         ]
     },

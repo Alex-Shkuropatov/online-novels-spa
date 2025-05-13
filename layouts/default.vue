@@ -4,17 +4,11 @@
    <ShareHeaderDocs />
   </template>
   <template #start>
-   <ViewState
-    v-slot="navigation"
-    src="route://meta"
-    path="navigation"
-   >
     <Sidebar
-     id="sidebar"
-     active-background-color="teal-700"
-     :src="`app-config://usebootstrap/navigations/${navigation.data || 'default'}`"
+        id="sidebar"
+        active-background-color="teal-700"
+        :data="computedSidebarRoutes"
     />
-   </ViewState>
   </template>
   <template #end>
    <Toc
@@ -44,3 +38,82 @@
   </template>
  </PageLayout>
 </template>
+
+<script lang="ts" setup>
+import { useAuthStore } from '@/store/auth';
+
+const auth = useAuthStore();
+
+const defaultSidebarRoutes = [
+  {
+    "name": "Online Novels",
+    "icon": "bi:book-half",
+    "color": "indigo",
+    "children": [
+      {
+        "name": "Главная",
+        "path": "/"
+      },
+    ],
+  },
+  // {
+  //   "name": "About Nuxt3",
+  //   "icon": "simple-icons:nuxtdotjs",
+  //   "color": "indigo",
+  //   "children": [
+  //   ]
+  // }
+];
+
+const loggedInSidebarRoutes = [
+  {
+    "name": "Профиль",
+    "icon": "bi:pencil",
+    "color": "indigo",
+    "children": [
+      {
+        "name": "Мои новелы",
+        "path": "/"
+      },
+      {
+        "name": "Выйти",
+        "action" : () => {
+          auth.logout();
+          navigateTo('/');
+        },
+      },
+    ],
+  },
+];
+
+const anonymousSidebarRoutes = [
+  {
+    "name": "Авторизация",
+    "icon": "bi:person-circle",
+    "color": "indigo",
+    "children": [
+      {
+        "name": "Вход",
+        "path": "/sign-in"
+      },
+      {
+        "name": "Регистрация",
+        "path": "/sign-up"
+      },
+    ],
+  },
+];
+
+
+const isLoggedIn = computed(() => auth.isAuthenticated);
+
+const computedSidebarRoutes = computed(() => {
+  if(isLoggedIn.value) {
+    return [...defaultSidebarRoutes, ...loggedInSidebarRoutes];
+  } else {
+    return [...defaultSidebarRoutes, ...anonymousSidebarRoutes];
+  }
+});
+
+
+</script>
