@@ -56,8 +56,8 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/store/auth';
 
-const email = ref('');
-const password = ref('');
+const email = ref('user123123@example.com');
+const password = ref('string123123');
 
 
 const auth = useAuthStore();

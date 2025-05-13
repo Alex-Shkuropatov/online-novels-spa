@@ -56,19 +56,12 @@ const defaultSidebarRoutes = [
       },
     ],
   },
-  // {
-  //   "name": "About Nuxt3",
-  //   "icon": "simple-icons:nuxtdotjs",
-  //   "color": "indigo",
-  //   "children": [
-  //   ]
-  // }
 ];
 
 const loggedInSidebarRoutes = [
   {
     "name": "Профиль",
-    "icon": "bi:pencil",
+    "icon": "bi:person-circle",
     "color": "indigo",
     "children": [
       {
@@ -77,10 +70,7 @@ const loggedInSidebarRoutes = [
       },
       {
         "name": "Выйти",
-        "action" : () => {
-          auth.logout();
-          navigateTo('/');
-        },
+        "path": "/logout"
       },
     ],
   },
