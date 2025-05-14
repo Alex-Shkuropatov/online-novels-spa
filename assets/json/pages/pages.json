@@ -14,5 +14,14 @@
  "/logout": {
   "title": "Logout",
   "description": ""
+ },
+ "/novels/create": {
+  "title": "Create novel",
+  "description": ""
+ },
+ "/novels/:novel_id/edit": {
+  "title": "Edit novel",
+  "description": "",
+  "layout": "landing"
  }
 }
