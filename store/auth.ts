@@ -1,127 +1,107 @@
 import { defineStore } from 'pinia'
 
+/** Интерфейс под данные, которые возвращает /users/me */
+export interface UserProfile {
+  user_id:          string
+  email:            string
+  username:         string
+  birthday:         string | null
+  avatar:           string | null
+  created_at:       string
+  last_login:       string
+  friends:          string[]
+  created_novels:   string[]
+  playing_novels:   string[]
+  planned_novels:   string[]
+  completed_novels: string[]
+  favorite_novels:  string[]
+  abandoned_novels: string[]
+}
+
 export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        accessToken: useCookie<string | null>('access_token').value,
-        tokenType: useCookie<string | null>('token_type').value,
-        email: useCookie<string | null>('user_email').value,
-    }),
+  state: () => ({
+    accessToken: useCookie<string | null>('access_token').value,
+    tokenType:   useCookie<string | null>('token_type').value,
+    email:       useCookie<string | null>('user_email').value,
+    user:        null as UserProfile | null,
+  }),
 
-    actions: {
-        async login(email: string, password: string) {
-            try {
-                const { data, error } = await useFetch('http://127.0.0.1:8000/auth/login', {
-                    method: 'POST',
-                    body: {
-                        email,
-                        password,
-                    },
-                })
+  getters: {
+    isAuthenticated: (state) => !!state.accessToken,
+    authHeader:      (state) =>
+      state.tokenType && state.accessToken
+        ? `${state.tokenType} ${state.accessToken}`
+        : '',
+  },
 
-                if (error.value || !data.value?.access_token) {
-                    throw new Error('Ошибка авторизации')
-                }
+  actions: {
+    async login(email: string, password: string) {
+      try {
+        const { data, error } = await useFetch('http://127.0.0.1:8000/auth/login', {
+          method: 'POST',
+          body: { email, password },
+        })
 
-                const access_token = data.value.access_token
-                const token_type = data.value.token_type
+        if (error.value || !data.value?.access_token) {
+          throw new Error('Ошибка авторизации')
+        }
 
-                // сохраняем
-                this.accessToken = access_token
-                this.tokenType = token_type
-                this.email = email
+        const access_token = data.value.access_token
+        const token_type   = data.value.token_type
 
-                // в куки
-                useCookie('access_token').value = access_token
-                useCookie('token_type').value = token_type
-                useCookie('user_email').value = email
-            } catch (err) {
-                console.error('[auth/login] Ошибка:', err)
-                throw err
-            }
-        },
+        // сохраняем в сторе
+        this.accessToken = access_token
+        this.tokenType   = token_type
+        this.email       = email
 
-        logout() {
-            this.accessToken = null
-            this.tokenType = null
-            this.email = null
+        // и в куки
+        useCookie('access_token').value = access_token
+        useCookie('token_type').value   = token_type
+        useCookie('user_email').value   = email
 
-            useCookie('access_token').value = null
-            useCookie('token_type').value = null
-            useCookie('user_email').value = null
-        },
+        // сразу подтягиваем профиль
+        await this.fetchProfile()
+      } catch (err) {
+        console.error('[auth/login] Ошибка:', err)
+        throw err
+      }
     },
 
-    getters: {
-        isAuthenticated: (state) => !!state.accessToken,
-        authHeader: (state) =>
-            state.accessToken && state.tokenType
-                ? `${state.tokenType} ${state.accessToken}`
-                : '',
+    logout() {
+      this.accessToken = null
+      this.tokenType   = null
+      this.email       = null
+      this.user        = null
+
+      useCookie('access_token').value = null
+      useCookie('token_type').value   = null
+      useCookie('user_email').value   = null
     },
+
+    async fetchProfile() {
+      if (!this.accessToken) {
+        this.user = null
+        return
+      }
+
+      const { data, error } = await useFetch<UserProfile>(
+        'http://127.0.0.1:8000/auth/me',
+        {
+          headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${this.accessToken}`,
+
+          },
+        }
+      )
+
+      if (error.value) {
+        console.error('[auth/fetchProfile] Ошибка загрузки профиля:', error.value)
+        this.user = null
+        return
+      }
+
+      this.user = data.value!
+    },
+  },
 })
-
-// interface AuthState {
-//     accessToken: string | null
-//     tokenType: string | null
-//     email: string | null
-// }
-// export const useAuthStore = defineStore('auth', {
-//     state: (): AuthState => ({
-//         accessToken: import.meta.client ? localStorage.getItem('access_token') : null,
-//         tokenType: import.meta.client ? localStorage.getItem('token_type') : null,
-//         email: import.meta.client ? localStorage.getItem('user_email') : null,
-//     }),
-//
-//     actions: {
-//         async login(email: string, password: string) {
-//             try {
-//                 const response = await fetch('http://127.0.0.1:8000/auth/login', {
-//                     method: 'POST',
-//                     headers: {
-//                         'Content-Type': 'application/json',
-//                     },
-//                     body: JSON.stringify({ email, password }),
-//                 });
-//
-//                 const data = await response.json();
-//
-//                 if (data.access_token) {
-//                     this.accessToken = data.access_token;
-//                     this.tokenType = data.token_type;
-//                     this.email = email;
-//
-//                     if (process.client) {
-//                         localStorage.setItem('access_token', this.accessToken);
-//                         localStorage.setItem('token_type', this.tokenType!);
-//                         localStorage.setItem('user_email', email);
-//                     }
-//                 } else {
-//                     throw new Error('Invalid request');
-//                 }
-//             } catch (error) {
-//                 console.error('Ошибка авторизации:', error);
-//                 throw error;
-//             }
-//         },
-//
-//         logout() {
-//             this.accessToken = null
-//             this.tokenType = null
-//             this.email = null
-//
-//             if (process.client) {
-//                 localStorage.removeItem('access_token')
-//                 localStorage.removeItem('token_type')
-//                 localStorage.removeItem('user_email')
-//             }
-//         },
-//     },
-//
-//     getters: {
-//         isAuthenticated: (state) => !!state.accessToken,
-//         authHeader: (state) =>
-//             state.accessToken && state.tokenType
-//                 ? `${state.tokenType} ${state.accessToken}`
-//                 : '',
-//     },
-// })

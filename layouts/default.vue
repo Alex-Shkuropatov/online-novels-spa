@@ -51,7 +51,7 @@ const defaultSidebarRoutes = [
     "color": "indigo",
     "children": [
       {
-        "name": "Главная",
+        "name": "Home page",
         "path": "/"
       },
     ],
@@ -60,16 +60,16 @@ const defaultSidebarRoutes = [
 
 const loggedInSidebarRoutes = [
   {
-    "name": "Профиль",
+    "name": "Profile",
     "icon": "bi:person-circle",
     "color": "indigo",
     "children": [
       {
-        "name": "Мои новелы",
-        "path": "/"
+        "name": "My Novels",
+        "path": "/mylist"
       },
       {
-        "name": "Выйти",
+        "name": "Logout",
         "path": "/logout"
       },
     ],
@@ -78,16 +78,16 @@ const loggedInSidebarRoutes = [
 
 const anonymousSidebarRoutes = [
   {
-    "name": "Авторизация",
+    "name": "Authorization",
     "icon": "bi:person-circle",
     "color": "indigo",
     "children": [
       {
-        "name": "Вход",
+        "name": "Sign-in",
         "path": "/sign-in"
       },
       {
-        "name": "Регистрация",
+        "name": "Sign-up",
         "path": "/sign-up"
       },
     ],
