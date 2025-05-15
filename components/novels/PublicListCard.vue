@@ -1,7 +1,7 @@
 <template>
  <Anchor
   class="card-link"
-  :to="`/novels/${novel.novel_id}`"
+  :to="novelUrl"
  >
   <Card
    class="border-0"
@@ -23,6 +23,7 @@
 <script setup>
 defineProps({
  novel: Object,
+ novelUrl: String,
 });
 </script>
 

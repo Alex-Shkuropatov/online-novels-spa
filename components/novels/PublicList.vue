@@ -8,6 +8,7 @@
   >
    <NovelsPublicListCard
     :novel="novel"
+    :novel-url="`/novels/${novel.novel_id}`"
    />
   </Col>
  </Row>

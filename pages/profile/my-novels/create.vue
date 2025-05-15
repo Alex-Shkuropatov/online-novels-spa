@@ -51,7 +51,7 @@ async function submitGenres() {
 
   novelStore.setNovel(data.value as IFirebaseNovel);
   // Navigation to the Next step
-  router.push(`/novels/${data.value.novel_id}/edit`);
+  router.push(`/profile/my-novels/${data.value.novel_id}/edit`);
  }
  catch (e) {
   console.error('Error while creating new novel', e);

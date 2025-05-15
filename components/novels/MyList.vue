@@ -40,7 +40,10 @@
     col="4"
     class="mb-4"
    >
-    <PublicListCard :novel="novel" />
+    <PublicListCard
+     :novel="novel"
+     :novel-url="`/profile/my-novels/${novel.novel_id}`"
+    />
    </Col>
    <Col
     v-if="!filteredNovels.length"

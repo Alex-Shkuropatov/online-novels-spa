@@ -67,7 +67,11 @@ const loggedInSidebarRoutes = [
   children: [
    {
     name: 'My Novels',
-    path: '/mylist',
+    path: '/profile/my-novels',
+   },
+   {
+    name: 'Create new novel',
+    path: '/profile/my-novels/create',
    },
    {
     name: 'Logout',
