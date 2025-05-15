@@ -96,9 +96,12 @@
       </DropdownMenu>
      </NavItemDropdown>
     </NavbarNavList>
-     <NuxtLink to="/sign-in" class="btn btn-outline-primary">
-       Авторизоваться
-     </NuxtLink>
+    <NuxtLink
+     to="/sign-in"
+     class="btn btn-outline-primary"
+    >
+     Авторизоваться
+    </NuxtLink>
    </NavbarCollapse>
   </Container>
  </Navbar>

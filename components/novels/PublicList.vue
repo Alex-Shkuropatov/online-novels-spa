@@ -4,9 +4,9 @@
    v-for="novel in novels"
    :key="novel.novel_id"
    col="4"
+   class="p-2"
   >
    <NovelsPublicListCard
-    class="my-4"
     :novel="novel"
    />
   </Col>

@@ -1,27 +1,40 @@
 <template>
-  <Anchor
-    class="card-link"
-    :to="`/novels/${novel.novel_id}`"
-   >
-   <Card text-alignment="center">
-    <CardImgTop
-     :src="novel.cover_image_url"
-    />
-    <CardBody>
-     <CardTitle :small="true">{{ novel.title }}</CardTitle>
-    </CardBody>
-   </Card>
+ <Anchor
+  class="card-link"
+  :to="`/novels/${novel.novel_id}`"
+ >
+  <Card
+   class="border-0"
+   text-alignment="center"
+  >
+   <CardImgTop
+    class="card-img-fixed"
+    :src="novel.cover_image_url"
+   />
+   <CardBody class="p-2">
+    <CardTitle :small="true">
+     {{ novel.title }}
+    </CardTitle>
+   </CardBody>
+  </Card>
  </Anchor>
 </template>
 
 <script setup>
 defineProps({
-  novel: Object,
+ novel: Object,
 });
 </script>
 
 <style lang="scss" scoped>
 .card-link {
  text-decoration: none;
+  display: flex;
+  height: 100%;
+}
+.card-img-fixed {
+  height: 150px;
+  object-fit: cover;
+  width: 100%;
 }
 </style>

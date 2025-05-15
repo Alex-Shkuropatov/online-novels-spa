@@ -1,8 +1,8 @@
 <template>
-  <Container margin="y-5">
-    <NovelsPublicList></NovelsPublicList>
-  </Container>
- </template>
+ <Container margin="y-5">
+  <NovelsPublicList />
+ </Container>
+</template>
 
 <script lang="ts" setup>
 import { useAuthStore } from '@/store/auth';

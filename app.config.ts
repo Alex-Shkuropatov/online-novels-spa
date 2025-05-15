@@ -6,6 +6,6 @@ export default defineAppConfig({
   navigations: {
    default: defaultNavs,
   },
-  pages
+  pages,
  },
 });

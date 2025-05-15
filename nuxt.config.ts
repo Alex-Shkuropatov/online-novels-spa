@@ -4,11 +4,11 @@ export default defineNuxtConfig({
  css: [
   './assets/scss/custom.scss',
  ],
- compatibilityDate: '2024-07-03',
  devServer: {
   host: '127.0.0.1',
-  port: 3000
+  port: 3000,
  },
+ compatibilityDate: '2024-07-03',
  vite: {
   css: {
    preprocessorOptions: {

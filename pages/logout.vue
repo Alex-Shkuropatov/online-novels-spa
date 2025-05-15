@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/auth';
 const auth = useAuthStore();
 
 onMounted(() => {
-  auth.logout();
-  navigateTo('/');
+ auth.logout();
+ navigateTo('/');
 });
 </script>

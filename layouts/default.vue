@@ -4,11 +4,11 @@
    <ShareHeaderDocs />
   </template>
   <template #start>
-    <Sidebar
-        id="sidebar"
-        active-background-color="teal-700"
-        :data="computedSidebarRoutes"
-    />
+   <Sidebar
+    id="sidebar"
+    active-background-color="teal-700"
+    :data="computedSidebarRoutes"
+   />
   </template>
   <template #end>
    <Toc
@@ -33,9 +33,9 @@
     <slot />
    </b-div>
   </template>
-<!--  <template #footer>-->
-<!--   <ShareFooter />-->
-<!--  </template>-->
+  <!--  <template #footer> -->
+  <!--   <ShareFooter /> -->
+  <!--  </template> -->
  </PageLayout>
 </template>
 
@@ -43,67 +43,66 @@
 import { useAuthStore } from '@/store/auth';
 
 const auth = useAuthStore();
+const router = useRouter();
 
 const defaultSidebarRoutes = [
-  {
-    "name": "Online Novels",
-    "icon": "bi:book-half",
-    "color": "indigo",
-    "children": [
-      {
-        "name": "Home page",
-        "path": "/"
-      },
-    ],
-  },
+ {
+  name: 'Online Novels',
+  icon: 'bi:book-half',
+  color: 'indigo',
+  children: [
+   {
+    name: 'Home page',
+    path: '/',
+   },
+  ],
+ },
 ];
 
 const loggedInSidebarRoutes = [
-  {
-    "name": "Profile",
-    "icon": "bi:person-circle",
-    "color": "indigo",
-    "children": [
-      {
-        "name": "My Novels",
-        "path": "/mylist"
-      },
-      {
-        "name": "Logout",
-        "path": "/logout"
-      },
-    ],
-  },
+ {
+  name: 'Profile',
+  icon: 'bi:person-circle',
+  color: 'indigo',
+  children: [
+   {
+    name: 'My Novels',
+    path: '/mylist',
+   },
+   {
+    name: 'Logout',
+    path: '/logout',
+   },
+  ],
+ },
 ];
 
 const anonymousSidebarRoutes = [
-  {
-    "name": "Authorization",
-    "icon": "bi:person-circle",
-    "color": "indigo",
-    "children": [
-      {
-        "name": "Sign-in",
-        "path": "/sign-in"
-      },
-      {
-        "name": "Sign-up",
-        "path": "/sign-up"
-      },
-    ],
-  },
+ {
+  name: 'Authorization',
+  icon: 'bi:person-circle',
+  color: 'indigo',
+  children: [
+   {
+    name: 'Sign-in',
+    path: '/sign-in',
+   },
+   {
+    name: 'Sign-up',
+    path: '/sign-up',
+   },
+  ],
+ },
 ];
-
 
 const isLoggedIn = computed(() => auth.isAuthenticated);
 
 const computedSidebarRoutes = computed(() => {
-  if(isLoggedIn.value) {
-    return [...defaultSidebarRoutes, ...loggedInSidebarRoutes];
-  } else {
-    return [...defaultSidebarRoutes, ...anonymousSidebarRoutes];
-  }
+ if (isLoggedIn.value) {
+  return [...defaultSidebarRoutes, ...loggedInSidebarRoutes];
+ }
+ else {
+  return [...defaultSidebarRoutes, ...anonymousSidebarRoutes];
+ }
 });
-
-
 </script>
