@@ -19,38 +19,35 @@
      If you want to Generate based on what you entered, then save the data first and try to Generate.
     </div>
     <AiAssistedInput
+     v-model="title"
      label="Title"
      name="title"
-     :model-value="novel.title"
      :loading="isLoadingTitle"
-     @update:model-value="handleTitleUpdate"
      @generate="generateMetadataFieldWithAi('title')"
     />
 
     <AiAssistedInput
+     v-model="description"
      label="Description"
      name="description"
-     :model-value="novel.description"
      :loading="isLoadingDescription"
      hint="Briefly describe the main idea of the story - who your characters are, what their purpose is, and what conflict is unfolding."
-     @update:model-value="handleDescriptionUpdate"
      @generate="generateMetadataFieldWithAi('description')"
     />
 
     <AiAssistedInput
+     v-model="setting"
      label="Setting"
      name="setting"
-     :model-value="novel.setting"
      :loading="isLoadingSetting"
      hint="Specify the time and place of the action, the atmosphere of the world (city, nature, futuristic/historical setting) and key features of the location."
-     @update:model-value="handleSettingUpdate"
      @generate="generateMetadataFieldWithAi('setting')"
     />
 
     <div class="form-check form-switch mt-4">
      <input
       id="isPublic"
-      v-model="novel.is_public"
+      v-model="isPublic"
       class="form-check-input"
       type="checkbox"
      >
@@ -62,9 +59,21 @@
      </label>
     </div>
 
+     <div class="my-4">
+       <NuxtLink
+           :to="`/profile/my-novels/${novel.novel_id}/edit-character`"
+           class="btn btn-outline-secondary d-flex align-items-center gap-2"
+       >
+         <BIcon
+             icon="bi:person-arms-up"
+         />
+         Edit my character
+       </NuxtLink>
+     </div>
+
     <div class="d-flex justify-content-center mt-4">
      <button
-      class="btn btn-success"
+      class="btn btn-success mx-1"
       :disabled="isSubmitting"
       @click="submitEditedNovel"
      >
@@ -74,6 +83,15 @@
       />
       {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
      </button>
+      <NuxtLink
+          :to="`/profile/my-novels/${novel.novel_id}`"
+          class="btn btn-outline-secondary d-flex align-items-center gap-2 mx-1"
+      >
+        <BIcon
+            icon="bi:eye-fill"
+        />
+        View novel
+      </NuxtLink>
     </div>
    </div>
   </ClientOnly>
@@ -81,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+// `/profile/my-novels/${novelId.value}`
 import { useRoute } from 'vue-router';
 import { useNovelStore } from '@/store/novel-editor';
 
@@ -94,7 +113,7 @@ const route = useRoute();
 const novelId = computed(() => route.params.novel_id as string);
 
 const novelStore = useNovelStore();
-const novel = novelStore.novel;
+const novel = computed(() => novelStore.novel);
 
 // Fetch novel data when the page is loaded
 await useAsyncData(`novel-${novelId.value}`, async () => {
@@ -127,22 +146,40 @@ function handleImageUpdate(url: string): void {
  novelStore.updateField('cover_image_url', url);
 }
 
-function handleTitleUpdate(text: string): void {
- novel.title = text;
-}
-function handleDescriptionUpdate(text: string): void {
- novel.description = text;
-}
-function handleSettingUpdate(text: string): void {
- novel.setting = text;
-}
+const title = computed({
+  get: () => novelStore.novel?.title ?? '',
+  set: (value: string) => {
+    novelStore.updateField('title', value);
+  },
+});
+
+const description = computed({
+  get: () => novelStore.novel?.description ?? '',
+  set: (value: string) => {
+    novelStore.updateField('description', value);
+  },
+});
+
+const setting = computed({
+  get: () => novelStore.novel?.setting ?? '',
+  set: (value: string) => {
+    novelStore.updateField('setting', value);
+  },
+});
+
+const isPublic = computed({
+  get: () => novelStore.novel?.is_public ?? '',
+  set: (value: string) => {
+    novelStore.updateField('is_public', value);
+  },
+});
 
 const isLoadingTitle = ref(false);
 const isLoadingDescription = ref(false);
 const isLoadingSetting = ref(false);
 
 async function generateMetadataFieldWithAi(fieldName: 'title' | 'description' | 'setting'): Promise<void> {
- if (!novel || !novel.novel_id) {
+ if (!novel.value || !novel.value.novel_id) {
   console.error('No novel loaded or novel_id missing');
   return;
  }
@@ -159,7 +196,7 @@ async function generateMetadataFieldWithAi(fieldName: 'title' | 'description' | 
  fieldLoading.value = true;
 
  try {
-  const response = await fetch(`http://127.0.0.1:8000/ai/novels/${novel.novel_id}/metadata`, {
+  const response = await fetch(`http://127.0.0.1:8000/ai/novels/${novel.value.novel_id}/metadata`, {
    method: 'POST',
    headers: {
     'Authorization': `Bearer ${token}`,
@@ -197,7 +234,7 @@ async function generateMetadataFieldWithAi(fieldName: 'title' | 'description' | 
 const isSubmitting = ref(false);
 
 async function submitEditedNovel(): Promise<void> {
- if (!novel || !novel.novel_id) {
+ if (!novel.value || !novel.value.novel_id) {
   alert('No novel loaded.');
   return;
  }
@@ -206,14 +243,14 @@ async function submitEditedNovel(): Promise<void> {
  const token = useCookie('access_token').value;
 
  try {
-  const response = await fetch(`http://127.0.0.1:8000/novels/${novel.novel_id}`, {
+  const response = await fetch(`http://127.0.0.1:8000/novels/${novel.value.novel_id}`, {
    method: 'PUT',
    headers: {
     'Authorization': `Bearer ${token}`,
     'Accept': 'application/json',
     'Content-Type': 'application/json',
    },
-   body: JSON.stringify(novel),
+   body: JSON.stringify(novel.value),
   });
 
   if (!response.ok) {
