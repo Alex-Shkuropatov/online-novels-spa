@@ -1,12 +1,12 @@
 <template>
  <div>
-  <label class="form-label fw-bold">Выберите жанры</label>
+  <label class="form-label fw-bold">Select genres</label>
 
   <div
    v-if="genres.length === 0"
    class="text-muted small"
   >
-   Загрузка...
+   Loading...
   </div>
 
   <div
@@ -78,7 +78,7 @@ onMounted(async () => {
   genres.value = await res.json();
  }
  catch (err) {
-  console.error('Ошибка загрузки жанров:', err);
+  console.error('Error loading genres:', err);
  }
 });
 </script>

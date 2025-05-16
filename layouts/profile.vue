@@ -38,6 +38,7 @@
     class="p-4"
    >
     <slot />
+    <MyList />
    </b-div>
   </template>
  </PageLayout>
@@ -46,6 +47,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAuthStore } from '@/store/auth';
+import MyList from '@/components/novels/MyList.vue';
 
 // НЕ ИМПОРТИРУЕМ '@/components/share/sidebar.vue' — Nuxt сам подхватит components/sidebar.vue
 // ЕСЛИ ВАШ Sidebar ЛЕЖИТ В ДРУГОМ МЕСТЕ — ПРОПИШИТЕ ПРАВИЛЬНЫЙ ПУТЬ, например:
@@ -62,7 +64,7 @@ interface SidebarRoute {
  children: SidebarChild[];
 }
 
-// если вы не хотите детально описывать — можно временно сделать `: any[]`
+// если не хотите детально описывать — можно временно сделать `: any[]`
 const defaultSidebarRoutes: SidebarRoute[] = [
  {
   name: 'Online Novels',

@@ -74,6 +74,18 @@ const loggedInSidebarRoutes = [
     path: '/profile/my-novels/create',
    },
    {
+    name: 'Friends list',
+    path: '/profile/friends',
+   },
+   {
+    name: 'Messages',
+    path: '/profile/messages',
+   },
+   {
+    name: 'Notifications',
+    path: '/profile/notification',
+   },
+   {
     name: 'Logout',
     path: '/logout',
    },
