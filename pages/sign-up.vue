@@ -7,10 +7,10 @@
    <div class="text-center mb-4">
     <i class="bi bi-person-plus fs-1 text-primary" />
     <h4 class="mt-2">
-     Регистрация
+     Registration
     </h4>
     <p class="text-muted">
-     Создайте новый аккаунт
+     Create a new account
     </p>
    </div>
 
@@ -34,13 +34,13 @@
      <label
       for="username"
       class="form-label"
-     >Имя пользователя</label>
+     >User Name</label>
      <input
       id="username"
       v-model="username"
       type="text"
       class="form-control"
-      placeholder="nickname"
+      placeholder="Enter your nickname"
       required
      >
     </div>
@@ -49,13 +49,13 @@
      <label
       for="password"
       class="form-label"
-     >Пароль</label>
+     >Password</label>
      <input
       id="password"
       v-model="password"
       type="password"
       class="form-control"
-      placeholder="Введите пароль"
+      placeholder="Enter your password"
       required
      >
     </div>
@@ -64,7 +64,7 @@
      <label
       for="birthday"
       class="form-label"
-     >Дата рождения</label>
+     >Date of birth</label>
      <input
       id="birthday"
       v-model="birthday"
@@ -80,18 +80,18 @@
       type="submit"
       class="btn btn-primary px-4"
      >
-      Зарегистрироваться
+      Sign up
      </button>
     </div>
    </form>
 
    <p class="text-center text-muted mt-3 mb-0">
-    Уже есть аккаунт?
+    Already have an account?
     <NuxtLink
      to="/sign-in"
      class="text-decoration-none text-primary"
     >
-     Войти
+     Sign in
     </NuxtLink>
    </p>
   </div>
@@ -124,12 +124,12 @@ async function handleRegister() {
 
   // const data = await response.json();
 
-  alert('Регистрация прошла успешно');
+  alert('Registration was successful');
   navigateTo('/sign-in');
  }
  catch (err) {
   console.error(err);
-  alert('Что-то пошло не так');
+  alert('Something went wrong');
  }
 }
 </script>

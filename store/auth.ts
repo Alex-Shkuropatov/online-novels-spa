@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', {
     });
 
     if (error.value || !data.value?.access_token) {
-     throw new Error('Ошибка авторизации');
+     throw new Error('Authorization error');
     }
 
     const access_token = data.value.access_token;
@@ -63,7 +63,7 @@ export const useAuthStore = defineStore('auth', {
     await this.fetchProfile();
    }
    catch (err) {
-    console.error('[auth/login] Ошибка:', err);
+    console.error('[auth/login] Error:', err);
     throw err;
    }
   },
@@ -97,7 +97,7 @@ export const useAuthStore = defineStore('auth', {
    );
 
    if (error.value) {
-    console.error('[auth/fetchProfile] Ошибка загрузки профиля:', error.value);
+    console.error('[auth/fetchProfile] Profile loading error:', error.value);
     this.user = null;
     this.logout();
 

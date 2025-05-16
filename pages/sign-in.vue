@@ -11,10 +11,10 @@
      class="text-primary"
     />
     <h5 class="mt-2">
-     Добро пожаловать
+     Welcome
     </h5>
     <p class="text-muted mb-0">
-     Войдите в свой аккаунт
+     Log in to your account
     </p>
    </div>
 
@@ -35,7 +35,7 @@
     </b-form-group>
 
     <b-form-group
-     label="Пароль"
+     label="Password"
      label-for="password"
      class="d-block my-2"
     >
@@ -43,7 +43,7 @@
       id="password"
       v-model="password"
       type="password"
-      placeholder="Введите пароль"
+      placeholder="Enter your password"
       required
       size="lg"
      />
@@ -56,7 +56,7 @@
       block
       class="btn-indigo mt-2"
      >
-      Войти
+      Log in
      </b-button>
     </div>
    </b-form>
@@ -65,12 +65,12 @@
     class="text-center text-muted mt-3 mb-0"
     style="font-size: 0.9rem;"
    >
-    Нет аккаунта?
+    No account?
     <NuxtLink
      to="/sign-up"
      class="text-primary text-decoration-none"
     >
-     Зарегистрируйтесь
+     Sign in 
     </NuxtLink>
    </p>
   </b-card>
@@ -92,7 +92,7 @@ async function handleLogin() {
   navigateTo('/');
  }
  catch (err) {
-  console.error('Неверный логин или пароль', err);
+  console.error('Invalid login or password', err);
  }
 }
 </script>
