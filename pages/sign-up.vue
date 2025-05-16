@@ -40,7 +40,7 @@
       v-model="username"
       type="text"
       class="form-control"
-      placeholder="nickname"
+      placeholder="Enter your nickname"
       required
      >
     </div>

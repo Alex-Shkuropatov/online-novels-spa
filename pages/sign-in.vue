@@ -56,7 +56,7 @@
       block
       class="btn-indigo mt-2"
      >
-      Войти
+      Log in
      </b-button>
     </div>
    </b-form>
