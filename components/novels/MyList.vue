@@ -1,4 +1,3 @@
-<!-- components/novels/MyList.vue -->
 <template>
   <b-container class="py-4">
     <!-- Tabs -->
@@ -9,9 +8,16 @@
           :key="tab.value"
           class="flex-shrink-0 me-2"
         >
+          <!-- Удалили :active -->
           <b-nav-link
-            :active="activeTab === tab.value"
             @click="activeTab = tab.value"
+            :class="[
+              'px-3',
+              activeTab === tab.value
+                ? 'bg-success text-white'
+                : 'bg-transparent text-success'
+            ]"
+            style="cursor: pointer; white-space: nowrap;"
           >
             {{ tab.label }}
           </b-nav-link>
@@ -21,7 +27,6 @@
 
     <!-- Search bar -->
     <div class="input-group mb-4">
-      <!-- Plain bootstrap input -->
       <input
         v-model="search"
         type="text"
@@ -33,7 +38,7 @@
         type="button"
         @click="onSearchClick"
       >
-        <i class="bi-search me-1" />Search
+        <i class="bi-search me-1" /> Search
       </button>
     </div>
 
@@ -94,7 +99,6 @@ const activeTab = ref<TabValue>('all')
 const search    = ref<string>('')
 const novels    = ref<Novel[]>([])
 
-// Pull your “/novels/me/novels” endpoint
 async function fetchNovels() {
   const url = new URL('http://127.0.0.1:8000/novels/me/novels')
   if (activeTab.value !== 'all') {
@@ -107,27 +111,18 @@ async function fetchNovels() {
     if (!res.ok) throw new Error(`Fetch error ${res.status}`)
     novels.value = await res.json()
   }
-  catch (e) {
-    console.error('[MyList] fetchNovels:', e)
+  catch {
     novels.value = []
   }
 }
 
-// Re-load whenever the tab changes
 watch(activeTab, () => {
-  search.value = ''    // reset the search box
+  search.value = ''
   fetchNovels()
 }, { immediate: true })
 
-// If you want the Search button to *refetch* from server,
-// uncomment this instead of filtering locally
-// function onSearchClick() {
-//   fetchNovels()
-// }
-
 function onSearchClick() {
-  // no-op, since we filter locally below
-  // But you could also re-query backend `/search?q=${search.value}`
+  /* оставить пустым или вызвать fetchNovels() */
 }
 
 const filteredNovels = computed(() => {
