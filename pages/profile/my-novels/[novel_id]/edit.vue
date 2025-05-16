@@ -59,17 +59,17 @@
      </label>
     </div>
 
-     <div class="my-4">
-       <NuxtLink
-           :to="`/profile/my-novels/${novel.novel_id}/edit-character`"
-           class="btn btn-outline-secondary d-flex align-items-center gap-2"
-       >
-         <BIcon
-             icon="bi:person-arms-up"
-         />
-         Edit my character
-       </NuxtLink>
-     </div>
+    <div class="my-4">
+     <NuxtLink
+      :to="`/profile/my-novels/${novel.novel_id}/create-character`"
+      class="btn btn-outline-secondary d-flex align-items-center gap-2"
+     >
+      <BIcon
+       icon="bi:person-arms-up"
+      />
+      Create character
+     </NuxtLink>
+    </div>
 
     <div class="d-flex justify-content-center mt-4">
      <button
@@ -83,15 +83,15 @@
       />
       {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
      </button>
-      <NuxtLink
-          :to="`/profile/my-novels/${novel.novel_id}`"
-          class="btn btn-outline-secondary d-flex align-items-center gap-2 mx-1"
-      >
-        <BIcon
-            icon="bi:eye-fill"
-        />
-        View novel
-      </NuxtLink>
+     <NuxtLink
+      :to="`/profile/my-novels/${novel.novel_id}`"
+      class="btn btn-outline-secondary d-flex align-items-center gap-2 mx-1"
+     >
+      <BIcon
+       icon="bi:eye-fill"
+      />
+      View novel
+     </NuxtLink>
     </div>
    </div>
   </ClientOnly>
@@ -147,31 +147,31 @@ function handleImageUpdate(url: string): void {
 }
 
 const title = computed({
-  get: () => novelStore.novel?.title ?? '',
-  set: (value: string) => {
-    novelStore.updateField('title', value);
-  },
+ get: () => novelStore.novel?.title ?? '',
+ set: (value: string) => {
+  novelStore.updateField('title', value);
+ },
 });
 
 const description = computed({
-  get: () => novelStore.novel?.description ?? '',
-  set: (value: string) => {
-    novelStore.updateField('description', value);
-  },
+ get: () => novelStore.novel?.description ?? '',
+ set: (value: string) => {
+  novelStore.updateField('description', value);
+ },
 });
 
 const setting = computed({
-  get: () => novelStore.novel?.setting ?? '',
-  set: (value: string) => {
-    novelStore.updateField('setting', value);
-  },
+ get: () => novelStore.novel?.setting ?? '',
+ set: (value: string) => {
+  novelStore.updateField('setting', value);
+ },
 });
 
 const isPublic = computed({
-  get: () => novelStore.novel?.is_public ?? '',
-  set: (value: string) => {
-    novelStore.updateField('is_public', value);
-  },
+ get: () => novelStore.novel?.is_public ?? '',
+ set: (value: string) => {
+  novelStore.updateField('is_public', value);
+ },
 });
 
 const isLoadingTitle = ref(false);

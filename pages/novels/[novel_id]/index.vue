@@ -1,15 +1,15 @@
 <template>
-  <div class="container py-4">
-    <div
-        v-if="!novel"
-        class="text-muted text-center"
-    >
-      Loading...
-    </div>
-    <template v-else>
-      <NovelGeneralInfo :novel="novel" />
-    </template>
+ <div class="container py-4">
+  <div
+   v-if="!novel"
+   class="text-muted text-center"
+  >
+   Loading...
   </div>
+  <template v-else>
+   <NovelGeneralInfo :novel="novel" />
+  </template>
+ </div>
 </template>
 
 <script setup lang="ts">
@@ -24,22 +24,22 @@ const novelStore = useNovelStore();
 
 // Fetch and store novel in Pinia
 await useAsyncData(`novel-${novelId}`, async () => {
-  const response = await fetch(`http://127.0.0.1:8000/novels/${novelId}`, {
-    headers: {
-      Accept: 'application/json',
-    },
+ const response = await fetch(`http://127.0.0.1:8000/novels/${novelId}`, {
+  headers: {
+   Accept: 'application/json',
+  },
+ });
+
+ if (!response.ok) {
+  throw createError({
+   statusCode: response.status,
+   message: 'Failed to load novel',
   });
+ }
 
-  if (!response.ok) {
-    throw createError({
-      statusCode: response.status,
-      message: 'Failed to load novel',
-    });
-  }
-
-  const data = await response.json();
-  novelStore.setNovel(data);
-  return data;
+ const data = await response.json();
+ novelStore.setNovel(data);
+ return data;
 });
 
 // Local ref to store novel for rendering
