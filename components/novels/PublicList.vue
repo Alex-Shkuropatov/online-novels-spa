@@ -1,23 +1,30 @@
 <template>
   <b-container class="py-4">
-    <div class="d-flex gap-2 mb-4">
-      <div class="input-group flex-grow-1">
+    <!-- Search + Filter -->
+    <div class="d-flex gap-2 mb-4 align-items-start">
+      <!-- Поиск -->
+      <div class="input-group input-group-sm flex-grow-1">
         <input
           v-model="search"
           type="text"
-          class="form-control"
+          class="form-control form-control-sm"
           placeholder="Search novels…"
         />
         <button
-          class="btn btn-outline-primary"
+          class="btn btn-outline-primary btn-sm"
           @click="onSearchClick"
         >
           <i class="bi-search me-1" /> Search
         </button>
       </div>
-      <GenreFilterModal v-model="selectedGenres" />
-    </div>
+      
+      <!-- Кнопка фильтра -->
+      <div class="filter-wrapper">
+        <GenreFilterModal v-model="selectedGenres" />
+      </div>
+    </div> <!-- <-- Закрываем d-flex -->
 
+    <!-- Сетка карточек -->
     <b-row>
       <b-col
         v-for="novel in filteredNovels"
@@ -36,6 +43,7 @@
     </b-row>
   </b-container>
 </template>
+
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
@@ -75,7 +83,7 @@ watch(selectedGenres, () => {
 }, { immediate: true });
 
 function onSearchClick() {
-  // поиск будет применён в computed ниже
+  /* поиск применяется в computed */
 }
 
 const filteredNovels = computed(() => {
@@ -89,3 +97,12 @@ const filteredNovels = computed(() => {
 
 onMounted(fetchNovels);
 </script>
+
+<style scoped>
+/* Уменьшаем высоту Filter Genres кнопки внутри GenreFilterModal */
+.filter-wrapper ::v-deep button.btn {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.2 !important;
+}
+</style>
