@@ -11,7 +11,6 @@
     <!-- Модальное окно -->
     <Modal
       ref="demoModal"
-
     >
       <ModalDialog>
         <ModalContent>
@@ -45,6 +44,13 @@
           </ModalBody>
 
           <ModalFooter>
+            <!-- Reset button -->
+            <b-button
+              color="warning"
+              @click="resetSelection"
+            >
+              Reset
+            </b-button>
             <b-button
               color="secondary"
               @click="closeModal"
@@ -107,11 +113,15 @@ const closeModal = () => {
   demoModal.value?.hide();
 };
 
+// сброс выбора жанров без эмита
+const resetSelection = () => {
+  localSelectedGenres.value = [];
+};
+
 // по клику “Apply Filter” — эмитим и закрываем
 const applyAndClose = () => {
   emit('update:modelValue', localSelectedGenres.value);
   closeModal();
 };
-
 
 </script>
