@@ -60,7 +60,18 @@
     </div>
 
     <div class="my-4">
+      <NuxtLink
+          v-if="characterStore.isCharacterLoaded"
+          :to="`/profile/my-novels/${novel.novel_id}/characters/${characterStore.character.character_id}`"
+          class="btn btn-outline-secondary d-flex align-items-center gap-2"
+      >
+        <BIcon
+            icon="bi:person-arms-up"
+        />
+        Edit character
+      </NuxtLink>
      <NuxtLink
+         v-else
       :to="`/profile/my-novels/${novel.novel_id}/create-character`"
       class="btn btn-outline-secondary d-flex align-items-center gap-2"
      >
@@ -102,6 +113,7 @@
 // `/profile/my-novels/${novelId.value}`
 import { useRoute } from 'vue-router';
 import { useNovelStore } from '@/store/novel-editor';
+import { useCharacterStore } from "~/store/character";
 
 import NovelImageUploader from '~/components/novel-editor/NovelImageUploader.vue';
 
@@ -113,6 +125,7 @@ const route = useRoute();
 const novelId = computed(() => route.params.novel_id as string);
 
 const novelStore = useNovelStore();
+const characterStore = useCharacterStore();
 const novel = computed(() => novelStore.novel);
 
 // Fetch novel data when the page is loaded
@@ -138,6 +151,8 @@ await useAsyncData(`novel-${novelId.value}`, async () => {
 
  // Set novel data into Pinia store
  novelStore.setNovel(data);
+
+ await characterStore.fetchUserCharacter(novelId.value);
 
  return data;
 });

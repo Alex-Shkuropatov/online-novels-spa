@@ -32,7 +32,6 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router';
 import { useCharacterStore } from '~/store/character';
-import type { INovelCharacter } from '~/types/character';
 import CharacterForm from '~/components/novel-editor/CharacterForm.vue';
 
 definePageMeta({
@@ -45,40 +44,18 @@ const novelId = computed(() => route.params.novel_id as string);
 const characterId = computed(() => route.params.character_id as string);
 
 // Fetch character data when the page is loaded
-const { data: character } = await useAsyncData(`character-${characterId.value}`, async () => {
- const token = useCookie('access_token').value;
+await useAsyncData(`character-${characterId.value}`, async () => {
+ await characterStore.fetchUserCharacter(novelId.value);
 
- const response = await fetch(`http://127.0.0.1:8000/novels/${novelId.value}/characters`, {
-  method: 'GET',
-  headers: {
-   Authorization: `Bearer ${token}`,
-   Accept: 'application/json',
-  },
- });
-
- if (!response.ok) {
+ if (!characterStore.character.character_id) {
   throw createError({
-   statusCode: response.status,
-   message: 'Failed to load novel',
+   statusCode: 404,
+   statusMessage: 'Character not found',
   });
  }
 
- const responseData = await response.json();
- // find our character in the list of all characters
- const characterData = responseData.find((char: INovelCharacter) => char.character_id === characterId.value);
- return characterData;
+ return characterStore.character;
 });
-
-if (!character.value) {
- throw createError({
-  statusCode: 404,
-  statusMessage: 'Page Not Found',
- });
-}
-else {
- // Set novel data into Pinia store
- characterStore.setCharacter(character.value as INovelCharacter);
-}
 
 const isSubmitting = ref(false);
 

@@ -70,7 +70,7 @@
      to="/sign-up"
      class="text-primary text-decoration-none"
     >
-     Sign in 
+     Sign in
     </NuxtLink>
    </p>
   </b-card>
