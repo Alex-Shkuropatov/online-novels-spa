@@ -11,7 +11,6 @@
      :key="tab.value"
      class="flex-shrink-0 me-2"
     >
-     <!-- Удалили :active -->
      <b-nav-link
       :class="[
        'px-3',
@@ -123,11 +122,6 @@ async function fetchNovels() {
     url.searchParams.set('user_status', activeTab.value);
   }
 
-  if (selectedGenres.value.length > 0) {
-    selectedGenres.value.forEach((genre) =>
-      url.searchParams.append('genres', genre)
-    );
-  }
 
   try {
     const res = await fetch(url.toString(), {
@@ -135,7 +129,6 @@ async function fetchNovels() {
     });
     if (!res.ok) throw new Error(`Fetch error ${res.status}`);
     novels.value = await res.json();
-    console.log('Fetched novels:', novels.value);
   } catch {
     novels.value = [];
   }
@@ -153,22 +146,33 @@ function onSearchClick() {
 }
 
 const filteredNovels = computed(() => {
-  // если данных ещё нет или массив пуст — вернуть пустой
-  if (!novels.value || novels.value.length === 0) {
-    return [];
+  // базовый массив
+  let list = novels.value ?? [];
+
+  // 1) жанровая фильтрация
+  if (selectedGenres.value.length > 0) {
+    list = list.filter((novel: any) => {
+      // если у романа несколько жанров:
+      if (Array.isArray((novel as any).genres)) {
+        return (novel as any).genres.some((g: string) =>
+          selectedGenres.value.includes(g)
+        );
+      }
+      // или если у романа просто одно поле "genre":
+      return selectedGenres.value.includes((novel as any).genre);
+    });
   }
 
-  // без поискового запроса — показываем всё
-  if (!search.value.trim()) {
-    return novels.value;
+  // 2) текстовый поиск
+  if (search.value.trim()) {
+    const q = search.value.toLowerCase();
+    list = list.filter(n =>
+      n.title.toLowerCase().includes(q)
+    );
   }
 
-  // иначе фильтруем по title
-  const q = search.value.toLowerCase();
-  return novels.value.filter(n =>
-    n.title.toLowerCase().includes(q),
-  );
+  return list;
 });
-;
+
 
 </script>
