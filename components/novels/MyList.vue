@@ -28,22 +28,27 @@
    </b-nav>
   </div>
 
-  <!-- Search bar -->
-  <div class="input-group mb-4">
-   <input
+<!-- Search bar -->
+<div class="input-group mb-4">
+  <input
     v-model="search"
     type="text"
     class="form-control"
     placeholder="Search novels…"
-   >
-   <button
+  />
+  <button
     class="btn btn-outline-primary"
     type="button"
     @click="onSearchClick"
-   >
+  >
     <i class="bi-search me-1" /> Search
-   </button>
-  </div>
+  </button>
+  <!-- Фильтр по жанрам -->
+  <GenreFilterModal
+    v-model="selectedGenres"
+
+  />
+</div>
 
   <!-- Grid of cards -->
   <b-row>
@@ -74,7 +79,11 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useAuthStore } from '@/store/auth';
+import GenreFilterModal from "./GenreFilterModal.vue";
 import PublicListCard from '@/components/novels/PublicListCard.vue';
+
+
+const selectedGenres = ref<string[]>([]);
 
 interface Novel {
  novel_id: string;
@@ -108,36 +117,58 @@ const search = ref<string>('');
 const novels = ref<Novel[]>([]);
 
 async function fetchNovels() {
- const url = new URL('http://127.0.0.1:8000/novels/me/novels');
- if (activeTab.value !== 'all') {
-  url.searchParams.set('user_status', activeTab.value);
- }
- try {
-  const res = await fetch(url.toString(), {
-   headers: { Authorization: auth.authHeader },
-  });
-  if (!res.ok) throw new Error(`Fetch error ${res.status}`);
-  novels.value = await res.json();
- }
- catch {
-  novels.value = [];
- }
+  const url = new URL('http://127.0.0.1:8000/novels/me/novels');
+
+  if (activeTab.value !== 'all') {
+    url.searchParams.set('user_status', activeTab.value);
+  }
+
+  if (selectedGenres.value.length > 0) {
+    selectedGenres.value.forEach((genre) =>
+      url.searchParams.append('genres', genre)
+    );
+  }
+
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: auth.authHeader },
+    });
+    if (!res.ok) throw new Error(`Fetch error ${res.status}`);
+    novels.value = await res.json();
+    console.log('Fetched novels:', novels.value);
+  } catch {
+    novels.value = [];
+  }
 }
 
-watch(activeTab, () => {
- search.value = '';
- fetchNovels();
+
+watch([activeTab, selectedGenres], () => {
+  search.value = '';
+  fetchNovels();
 }, { immediate: true });
+
 
 function onSearchClick() {
  /* оставить пустым или вызвать fetchNovels() */
 }
 
 const filteredNovels = computed(() => {
- if (!search.value.trim()) return novels.value;
- const q = search.value.toLowerCase();
- return novels.value.filter(n =>
-  n.title.toLowerCase().includes(q),
- );
+  // если данных ещё нет или массив пуст — вернуть пустой
+  if (!novels.value || novels.value.length === 0) {
+    return [];
+  }
+
+  // без поискового запроса — показываем всё
+  if (!search.value.trim()) {
+    return novels.value;
+  }
+
+  // иначе фильтруем по title
+  const q = search.value.toLowerCase();
+  return novels.value.filter(n =>
+    n.title.toLowerCase().includes(q),
+  );
 });
+;
+
 </script>
