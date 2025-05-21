@@ -15,7 +15,7 @@
    <b-button
     size="sm"
     icon="bi:trash"
-    @click="emitDelete"
+    @click="handleDelete"
    >
     Delete
    </b-button>
@@ -109,7 +109,7 @@ const saveEdit = async (): Promise<void> => {
  }
 };
 
-const emitDelete = async (): Promise<void> => {
+const handleDelete = async (): Promise<void> => {
  const res = await fetch(`http://127.0.0.1:8000/novels/segments/${props.segment.segment_id}`, {
   method: 'DELETE',
  });

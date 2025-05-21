@@ -25,12 +25,6 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-// import { ref, onMounted } from 'vue';
-// import ChatMessage from '@/components/ChatMessage.vue';
-// import ChatInput from '@/components/MainInput.vue';
-//
-// const props = defineProps({ novelId: String });
-// const chatContainer = ref(null);
 
 const hasPrologue = computed(() => segments.value.length > 0);
 

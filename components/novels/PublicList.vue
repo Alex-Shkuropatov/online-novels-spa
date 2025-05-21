@@ -1,7 +1,8 @@
 <template>
-  <b-container class="py-4">
+  <Container>
+    <Row align-items="start">
     <!-- Search + Filter -->
-    <div class="d-flex gap-2 mb-4 align-items-start">
+      <div class="d-flex gap-2 mb-4 align-items-start">
       <!-- Поиск -->
       <div class="input-group input-group-sm flex-grow-1">
         <input
@@ -22,26 +23,27 @@
       <div class="filter-wrapper">
         <GenreFilterModal v-model="selectedGenres" />
       </div>
-    </div> <!-- <-- Закрываем d-flex -->
+    </div>
+    </Row>
 
     <!-- Сетка карточек -->
-    <b-row>
-      <b-col
+    <Row>
+      <Col
         v-for="novel in filteredNovels"
         :key="novel.novel_id"
-        cols="4"
+        col="4"
         class="mb-4"
       >
         <PublicListCard
           :novel="novel"
           :novel-url="`/novels/${novel.novel_id}`"
         />
-      </b-col>
-      <b-col v-if="filteredNovels.length === 0" cols="12">
+      </Col>
+      <Col v-if="filteredNovels.length === 0" col="12">
         <p class="text-center text-muted">Nothing found</p>
-      </b-col>
-    </b-row>
-  </b-container>
+      </Col>
+    </Row>
+  </Container>
 </template>
 
 
