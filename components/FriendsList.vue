@@ -77,7 +77,7 @@ const tabs = [
   { label: 'Friends List',  value: 'friends'  as Mode },
   { label: 'Add New Friend', value: 'add'      as Mode },
   { label: 'Sent Request',   value: 'sent'     as Mode },
-  { label: 'Received Req.',  value: 'received' as Mode },
+  { label: 'Received Request',  value: 'received' as Mode },
 ] as const;
 
 const title = computed(() =>
@@ -112,7 +112,7 @@ async function loadRequests() {
   receivedRequests.value = await Promise.all(data.incoming.map(fetchUser));
 }
 
-// При смене таба
+// при смене таба
 watch(activeTab, () => {
   search.value = '';
   if (activeTab.value === 'friends') loadFriends();

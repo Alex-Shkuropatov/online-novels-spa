@@ -1,18 +1,17 @@
 <template>
   <div class="d-flex align-items-center p-2 border-bottom">
-    <!-- useBootstrap Avatar -->
-    <Avatar
-      :src="avatarUrl"
-      size="md"
-      rounded
-      class="me-3"
+    <!-- Вместо <Avatar> теперь обычный <img> -->
+    <img
+      :src="avatarUrl || defaultAvatar"
+      alt="Avatar"
+      class="rounded-circle me-3"
+      style="width: 40px; height: 40px; object-fit: cover;"
     />
 
     <div class="flex-grow-1">
       <h5 class="mb-0">{{ friend.username }}</h5>
     </div>
 
-    <!-- Кнопки по режиму -->
     <div class="d-flex gap-2">
       <b-button
         v-if="mode === 'friends'"
@@ -73,7 +72,7 @@ import { useRuntimeConfig } from '#app';
 interface Friend {
   user_id: string;
   username: string;
-  avatar?: string;
+  avatar?: string; // относительный путь или полный URL
 }
 
 const props = defineProps<{
@@ -81,16 +80,23 @@ const props = defineProps<{
   mode: 'friends' | 'add' | 'sent' | 'received';
 }>();
 
-// строим абсолютный URL аватарки
+// плейсхолдер, если у пользователя нет аватарки:
+const defaultAvatar = '/images/default-avatar.png'; // создайте этот файл в public/images/
+
+// соберём полный URL аватарки:
 const config = useRuntimeConfig();
 const avatarUrl = computed(() => {
   const a = props.friend.avatar;
   if (!a) return '';
-  return a.startsWith('http')
-    ? a
-    : `${config.public.apiBase}${a}`;
+  // если строка уже абсолютная
+  if (a.startsWith('http://') || a.startsWith('https://')) {
+    return a;
+  }
+  // иначе — добавляем базу
+  return `${config.public.apiBase}${a}`;
 });
 
+// эмитим события дальше
 defineEmits<{
   (e: 'chat', friend: Friend): void;
   (e: 'delete', friend: Friend): void;
