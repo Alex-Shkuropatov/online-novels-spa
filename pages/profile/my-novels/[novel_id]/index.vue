@@ -10,12 +10,21 @@
    <NovelGeneralInfo :novel="novel" />
    <NuxtLink
     :to="`/profile/my-novels/${novel.novel_id}/edit`"
-    class="btn btn-outline-secondary d-flex align-items-center gap-2"
+    class="btn btn-outline-secondary d-flex align-items-center gap-2 my-1"
    >
     <BIcon
      icon="bi:pencil-square"
     />
     Edit
+   </NuxtLink>
+   <NuxtLink
+    :to="`/novels/${novelId}/play`"
+    class="btn btn-primary d-flex align-items-center gap-2 my-1"
+   >
+    <BIcon
+     icon="bi:play-circle"
+    />
+    Play
    </NuxtLink>
   </template>
  </div>

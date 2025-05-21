@@ -8,6 +8,15 @@
   </div>
   <template v-else>
    <NovelGeneralInfo :novel="novel" />
+   <NuxtLink
+    :to="`/novels/${novelId}/play`"
+    class="btn btn-primary d-flex align-items-center gap-2 my-2"
+   >
+    <BIcon
+     icon="bi:play-circle"
+    />
+    Play
+   </NuxtLink>
   </template>
  </div>
 </template>

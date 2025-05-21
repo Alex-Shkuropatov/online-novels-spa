@@ -98,7 +98,6 @@ export const useAuthStore = defineStore('auth', {
 
    if (error.value) {
     console.error('[auth/fetchProfile] Profile loading error:', error.value);
-    this.user = null;
     this.logout();
 
     // Redirect to home

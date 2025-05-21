@@ -27,27 +27,26 @@
    </b-nav>
   </div>
 
-<!-- Search bar -->
-<div class="input-group mb-4">
-  <input
+  <!-- Search bar -->
+  <div class="input-group mb-4">
+   <input
     v-model="search"
     type="text"
     class="form-control"
     placeholder="Search novels…"
-  />
-  <button
+   >
+   <button
     class="btn btn-outline-primary"
     type="button"
     @click="onSearchClick"
-  >
+   >
     <i class="bi-search me-1" /> Search
-  </button>
-  <!-- Фильтр по жанрам -->
-  <GenreFilterModal
+   </button>
+   <!-- Фильтр по жанрам -->
+   <GenreFilterModal
     v-model="selectedGenres"
-
-  />
-</div>
+   />
+  </div>
 
   <!-- Grid of cards -->
   <b-row>
@@ -77,10 +76,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import GenreFilterModal from './GenreFilterModal.vue';
 import { useAuthStore } from '@/store/auth';
-import GenreFilterModal from "./GenreFilterModal.vue";
 import PublicListCard from '@/components/novels/PublicListCard.vue';
-
 
 const selectedGenres = ref<string[]>([]);
 
@@ -116,63 +114,59 @@ const search = ref<string>('');
 const novels = ref<Novel[]>([]);
 
 async function fetchNovels() {
-  const url = new URL('http://127.0.0.1:8000/novels/me/novels');
+ const url = new URL('http://127.0.0.1:8000/novels/me/novels');
 
-  if (activeTab.value !== 'all') {
-    url.searchParams.set('user_status', activeTab.value);
-  }
+ if (activeTab.value !== 'all') {
+  url.searchParams.set('user_status', activeTab.value);
+ }
 
-
-  try {
-    const res = await fetch(url.toString(), {
-      headers: { Authorization: auth.authHeader },
-    });
-    if (!res.ok) throw new Error(`Fetch error ${res.status}`);
-    novels.value = await res.json();
-  } catch {
-    novels.value = [];
-  }
+ try {
+  const res = await fetch(url.toString(), {
+   headers: { Authorization: auth.authHeader },
+  });
+  if (!res.ok) throw new Error(`Fetch error ${res.status}`);
+  novels.value = await res.json();
+ }
+ catch {
+  novels.value = [];
+ }
 }
 
-
 watch([activeTab, selectedGenres], () => {
-  search.value = '';
-  fetchNovels();
+ search.value = '';
+ fetchNovels();
 }, { immediate: true });
-
 
 function onSearchClick() {
  /* оставить пустым или вызвать fetchNovels() */
 }
 
 const filteredNovels = computed(() => {
-  // базовый массив
-  let list = novels.value ?? [];
+ // базовый массив
+ let list = novels.value ?? [];
 
-  // 1) жанровая фильтрация
-  if (selectedGenres.value.length > 0) {
-    list = list.filter((novel: any) => {
-      // если у романа несколько жанров:
-      if (Array.isArray((novel as any).genres)) {
-        return (novel as any).genres.some((g: string) =>
-          selectedGenres.value.includes(g)
-        );
-      }
-      // или если у романа просто одно поле "genre":
-      return selectedGenres.value.includes((novel as any).genre);
-    });
-  }
-
-  // 2) текстовый поиск
-  if (search.value.trim()) {
-    const q = search.value.toLowerCase();
-    list = list.filter(n =>
-      n.title.toLowerCase().includes(q)
+ // 1) жанровая фильтрация
+ if (selectedGenres.value.length > 0) {
+  list = list.filter((novel: any) => {
+   // если у романа несколько жанров:
+   if (Array.isArray((novel as any).genres)) {
+    return (novel as any).genres.some((g: string) =>
+     selectedGenres.value.includes(g),
     );
-  }
+   }
+   // или если у романа просто одно поле "genre":
+   return selectedGenres.value.includes((novel as any).genre);
+  });
+ }
 
-  return list;
+ // 2) текстовый поиск
+ if (search.value.trim()) {
+  const q = search.value.toLowerCase();
+  list = list.filter(n =>
+   n.title.toLowerCase().includes(q),
+  );
+ }
+
+ return list;
 });
-
-
 </script>
