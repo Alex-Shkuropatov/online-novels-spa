@@ -11,7 +11,15 @@
   </div>
   <div class="d-flex justify-content-end mt-2 gap-2">
    <b-button
-    color="teal"
+    color="teal-400"
+    text-color="white"
+    icon="bi:stars"
+    @click="generateText"
+   >
+    Choises
+   </b-button>
+   <b-button
+    color="teal-600"
     text-color="white"
     icon="bi:stars"
     @click="generateText"

@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import type { ITextSegment } from '~/types/TextSegment';
 
 const hasPrologue = computed(() => segments.value.length > 0);
 
@@ -90,13 +91,17 @@ const handleGenerated = () => {
  }
 };
 
-const handleSegmentUpdate = (updatedSegment) => {
- // const idx = segments.value.findIndex(s => s.id === updatedSegment.id);
- // if (idx !== -1) segments.value[idx] = updatedSegment;
+const handleSegmentUpdate = (updatedSegment: ITextSegment) => {
+ segments.value = segments.value.map((segment: ITextSegment) => {
+  if (segment.segment_id === updatedSegment.segment_id) {
+   return updatedSegment;
+  }
+  return segment;
+ });
 };
 
-const handleSegmentDelete = (id) => {
- // segments.value = segments.value.filter(s => s.id !== id);
+const handleSegmentDelete = (id: string) => {
+ segments.value = segments.value.filter((segment: ITextSegment) => segment.segment_id !== id);
 };
 
 async function aiGeneratePrologue() {

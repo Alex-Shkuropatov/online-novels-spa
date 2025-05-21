@@ -64,21 +64,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
-interface Segment {
- segment_id: string;
- author_id: string;
- content: string;
- created_at: string;
-}
+import type { ITextSegment } from '~/types/TextSegment';
 
 const props = defineProps<{
- segment: Segment;
+ segment: ITextSegment;
  novelId: string;
 }>();
 
 const emit = defineEmits<{
- (e: 'updated', segment: Segment): void;
+ (e: 'updated', segment: ITextSegment): void;
  (e: 'deleted', segmentId: string): void;
 }>();
 
@@ -95,29 +89,51 @@ const cancelEdit = (): void => {
 };
 
 const saveEdit = async (): Promise<void> => {
- const response = await fetch(`http://127.0.0.1:8000/novels/segments/${props.segment.segment_id}`, {
-  method: 'PUT',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ text: editedText.value }),
- });
- if (response.ok) {
-  emit('updated', { ...props.segment, content: editedText.value });
-  isEditing.value = false;
+ const token = useCookie('access_token').value;
+
+ try {
+  const response = await fetch(`http://127.0.0.1:8000/novels/${props.novelId}/text/segments/${props.segment.segment_id}`, {
+   method: 'PUT',
+   headers: {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+   },
+   body: JSON.stringify({ content: editedText.value }),
+  });
+  if (response.ok) {
+   isEditing.value = false;
+   emit('updated', { ...props.segment, content: editedText.value });
+  }
+  else {
+   throw new Error('Failed to update segment');
+  }
  }
- else {
-  console.error('Failed to update segment');
+ catch (error) {
+  console.error('Failed to update segment: ', error);
  }
 };
 
 const handleDelete = async (): Promise<void> => {
- const res = await fetch(`http://127.0.0.1:8000/novels/segments/${props.segment.segment_id}`, {
-  method: 'DELETE',
- });
- if (res.ok) {
-  emit('deleted', props.segment.segment_id);
+ const token = useCookie('access_token').value;
+
+ try {
+  const res = await fetch(`http://127.0.0.1:8000/novels/${props.novelId}/text/segments/${props.segment.segment_id}`, {
+   method: 'DELETE',
+   headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+   },
+  });
+  if (res.ok) {
+   emit('deleted', props.segment.segment_id);
+  }
+  else {
+   throw new Error('Failed to delete segment');
+  }
  }
- else {
-  console.error('Failed to delete segment');
+ catch (error) {
+  console.error('Failed to delete segment: ', error);
  }
 };
 </script>
