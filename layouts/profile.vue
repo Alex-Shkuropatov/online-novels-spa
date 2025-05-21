@@ -64,7 +64,6 @@ interface SidebarRoute {
  children: SidebarChild[];
 }
 
-// если не хотите детально описывать — можно временно сделать `: any[]`
 const defaultSidebarRoutes: SidebarRoute[] = [
  {
   name: 'Online Novels',

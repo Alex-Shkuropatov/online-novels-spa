@@ -8,6 +8,7 @@
    Filter Genres
   </b-button>
 
+<<<<<<< HEAD
   <!-- Модальное окно -->
   <Modal
    ref="demoModal"
@@ -70,6 +71,68 @@
    </ModalDialog>
   </Modal>
  </div>
+=======
+    <!-- Модальное окно -->
+    <Modal
+      ref="demoModal"
+    >
+      <ModalDialog>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Choose genres</ModalTitle>
+            <CloseButton dismiss="modal" />
+          </ModalHeader>
+
+          <ModalBody>
+            <div v-if="genres.length === 0" class="text-muted">
+              Loading genres...
+            </div>
+            <div v-else class="d-flex flex-column gap-2">
+              <div
+                v-for="genre in genres"
+                :key="genre"
+                class="form-check"
+              >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  :id="genre"
+                  :value="genre"
+                  v-model="localSelectedGenres"
+                />
+                <label class="form-check-label" :for="genre">
+                  {{ genre }}
+                </label>
+              </div>
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <!-- Reset button -->
+            <b-button
+              color="warning"
+              @click="resetSelection"
+            >
+              Reset
+            </b-button>
+            <b-button
+              color="secondary"
+              @click="closeModal"
+            >
+              Cancel
+            </b-button>
+            <b-button
+              color="primary"
+              @click="applyAndClose"
+            >
+              Apply Filter
+            </b-button>
+          </ModalFooter>
+        </ModalContent>
+      </ModalDialog>
+    </Modal>
+  </div>
+>>>>>>> Filter
 </template>
 
 <script setup lang="ts">
@@ -116,9 +179,18 @@ const closeModal = () => {
  demoModal.value?.hide();
 };
 
+// сброс выбора жанров без эмита
+const resetSelection = () => {
+  localSelectedGenres.value = [];
+};
+
 // по клику “Apply Filter” — эмитим и закрываем
 const applyAndClose = () => {
  emit('update:modelValue', localSelectedGenres.value);
  closeModal();
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> Filter
 </script>
