@@ -1,56 +1,56 @@
 <template>
  <Container>
-   <Row>
-     <Col col="12">
-       <!-- Tabs -->
-       <div class="mb-3">
-         <b-nav
-             pills
-             class="d-flex flex-nowrap overflow-auto"
-         >
-           <b-nav-item
-               v-for="tab in tabs"
-               :key="tab.value"
-               class="flex-shrink-0 me-2"
-           >
-             <b-nav-link
-                 :class="[
-       'px-3',
-       activeTab === tab.value
-        ? 'bg-success text-white'
-        : 'bg-transparent text-success',
-      ]"
-                 style="cursor: pointer; white-space: nowrap;"
-                 @click="activeTab = tab.value"
-             >
-               {{ tab.label }}
-             </b-nav-link>
-           </b-nav-item>
-         </b-nav>
-       </div>
+  <Row>
+   <Col col="12">
+    <!-- Tabs -->
+    <div class="mb-3">
+     <b-nav
+      pills
+      class="d-flex flex-nowrap overflow-auto"
+     >
+      <b-nav-item
+       v-for="tab in tabs"
+       :key="tab.value"
+       class="flex-shrink-0 me-2"
+      >
+       <b-nav-link
+        :class="[
+         'px-3',
+         activeTab === tab.value
+          ? 'bg-success text-white'
+          : 'bg-transparent text-success',
+        ]"
+        style="cursor: pointer; white-space: nowrap;"
+        @click="activeTab = tab.value"
+       >
+        {{ tab.label }}
+       </b-nav-link>
+      </b-nav-item>
+     </b-nav>
+    </div>
 
-       <!-- Search bar -->
-       <div class="input-group mb-4">
-         <input
-             v-model="search"
-             type="text"
-             class="form-control"
-             placeholder="Search novels…"
-         >
-         <button
-             class="btn btn-outline-primary"
-             type="button"
-             @click="onSearchClick"
-         >
-           <i class="bi-search me-1" /> Search
-         </button>
-         <!-- Фильтр по жанрам -->
-         <GenreFilterModal
-             v-model="selectedGenres"
-         />
-       </div>
-     </Col>
-   </Row>
+    <!-- Search bar -->
+    <div class="input-group mb-4">
+     <input
+      v-model="search"
+      type="text"
+      class="form-control"
+      placeholder="Search novels…"
+     >
+     <button
+      class="btn btn-outline-primary"
+      type="button"
+      @click="onSearchClick"
+     >
+      <i class="bi-search me-1" /> Search
+     </button>
+     <!-- Фильтр по жанрам -->
+     <GenreFilterModal
+      v-model="selectedGenres"
+     />
+    </div>
+   </Col>
+  </Row>
   <!-- Grid of cards -->
   <Row>
    <Col
