@@ -48,7 +48,7 @@ definePageMeta({
 const auth = useAuthStore();
 const config = useRuntimeConfig();
 
-// Собираем полный URL аватарки (если у вас в auth.user.avatar лежит относительная ссылка)
+// Собираем полный URL аватарки (если в auth.user.avatar лежит относительная ссылка)
 const avatarUrl = computed(() => {
  const a = auth.user?.avatar;
  if (!a) return '';
