@@ -2,16 +2,17 @@
  <b-container class="d-flex flex-column chat-wrapper">
   <div
    ref="chatContainer"
-   class="flex-grow-1 overflow-auto"
+   class="flex-grow-1 overflow-auto pt-3"
   >
-   <pre>{{ segments }}</pre>
-   <!--      <ChatMessage -->
-   <!--          v-for="segment in segments" -->
-   <!--          :key="segment.id" -->
-   <!--          :segment="segment" -->
-   <!--          @updated="handleUpdate" -->
-   <!--          @deleted="handleDelete" -->
-   <!--      /> -->
+   <!--   <pre>{{ segments }}</pre> -->
+   <ChatMessage
+    v-for="segment in segments"
+    :key="segment.segment_id"
+    :segment="segment"
+    :novel-id="novelId"
+    @updated="handleSegmentUpdate"
+    @deleted="handleSegmentDelete"
+   />
   </div>
   <ChatMainInput
    v-model="mainInputValue"
@@ -53,22 +54,110 @@ onMounted(() => {
  fetchSegments();
 });
 
-const handleSubmit = (newText) => {
- // segments.value.push({ id: Date.now(), text: newText });
+async function handleSubmit(newText: string) {
+  const token = useCookie('access_token').value;
+
+ try {
+  const response = await fetch(`http://127.0.0.1:8000/novels/${novelId}/text/segments`, {
+   method: 'POST',
+   headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+     'Content-Type': 'application/json',
+   },
+   body: JSON.stringify({
+    content: newText,
+   }),
+  });
+
+  if (!response.ok) {
+   const errorText = await response.text();
+   throw new Error(`Server responded with ${response.status}: ${errorText}`);
+  }
+  else {
+   const newSegment = await response.json();
+   segments.value.push(newSegment);
+   mainInputValue.value = '';
+  }
+ }
+ catch (err) {
+  console.error('Failed to POST text segment:', err);
+ }
 };
 
-const handleGenerated = (generatedText) => {
+const handleGenerated = () => {
  // optional: insert into input
+ console.log('on generated');
+ if (hasPrologue.value) {
+  aiGenerateNextTextSegment();
+ }
+ else {
+  aiGeneratePrologue();
+ }
 };
 
-const handleUpdate = (updatedSegment) => {
+const handleSegmentUpdate = (updatedSegment) => {
  // const idx = segments.value.findIndex(s => s.id === updatedSegment.id);
  // if (idx !== -1) segments.value[idx] = updatedSegment;
 };
 
-const handleDelete = (id) => {
+const handleSegmentDelete = (id) => {
  // segments.value = segments.value.filter(s => s.id !== id);
 };
+
+async function aiGeneratePrologue() {
+ console.log('aiGeneratePrologue');
+ const token = useCookie('access_token').value;
+
+ try {
+  const response = await fetch(`http://127.0.0.1:8000/ai/novels/${novelId}/text/prologue`, {
+   method: 'POST',
+   headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+   },
+  });
+
+  if (!response.ok) {
+   const errorText = await response.text();
+   throw new Error(`Server responded with ${response.status}: ${errorText}`);
+  }
+  else {
+   const newSegment = await response.json();
+   mainInputValue.value = newSegment.content;
+  }
+ }
+ catch (err) {
+  console.error('Failed to generate prologue:', err);
+ }
+}
+
+async function aiGenerateNextTextSegment() {
+ console.log('aiGenerateNextTextSegment');
+ const token = useCookie('access_token').value;
+
+ try {
+  const response = await fetch(`http://127.0.0.1:8000/ai/novels/${novelId}/text/continue`, {
+   method: 'POST',
+   headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+   },
+  });
+
+  if (!response.ok) {
+   const errorText = await response.text();
+   throw new Error(`Server responded with ${response.status}: ${errorText}`);
+  }
+  else {
+   const newSegment = await response.json();
+   mainInputValue.value = newSegment.content;
+  }
+ }
+ catch (err) {
+  console.error('Failed to next text segment:', err);
+ }
+}
 </script>
 
 <style scoped>

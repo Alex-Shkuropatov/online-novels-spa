@@ -3,9 +3,9 @@
   <div class="d-flex">
    <BFormTextarea
     v-model="inputText"
-    class="me-2"
     :placeholder="placeholder"
     rows="3"
+    @update:model-value="handleInputChange"
     @keyup.enter="submit"
    />
   </div>
@@ -51,13 +51,15 @@ watch(() => props.modelValue, (val) => {
 const submit = (): void => {
  if (!inputText.value.trim()) return;
  emit('submitted', inputText.value);
- emit('update:modelValue', '');
- inputText.value = '';
 };
 
 const generateText = (): void => {
  emit('ai-generate');
 };
+
+function handleInputChange(value: string) {
+ emit('update:modelValue', value);
+}
 </script>
 
 <style scoped>
