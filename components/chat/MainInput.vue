@@ -1,45 +1,65 @@
 <template>
- <div class="d-flex border-top p-3">
-  <b-form-input
-   v-model="inputText"
-   class="me-2"
-   placeholder="Введите текст..."
-   @keyup.enter="submit"
-  />
-  <b-button
-   color="primary"
-   class="me-2"
-   @click="submit"
-  >
-   Отправить
-  </b-button>
-  <b-button
-   color="info"
-   @click="generateText"
-  >
-   Сгенерировать
-  </b-button>
+ <div class="border-top py-2">
+  <div class="d-flex">
+   <BFormTextarea
+    v-model="inputText"
+    class="me-2"
+    :placeholder="placeholder"
+    rows="3"
+    @keyup.enter="submit"
+   />
+  </div>
+  <div class="d-flex justify-content-end mt-2 gap-2">
+   <b-button
+    color="teal"
+    text-color="white"
+    icon="bi:stars"
+    @click="generateText"
+   >
+    Generate
+   </b-button>
+   <b-button
+    color="primary"
+    @click="submit"
+   >
+    Send
+   </b-button>
+  </div>
  </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 
-const emit = defineEmits(['submitted', 'generated']);
-const inputText = ref('');
+const props = defineProps<{
+ modelValue?: string;
+ placeholder?: string;
+}>();
 
-const submit = () => {
+const emit = defineEmits<{
+ (e: 'submitted', value: string): void;
+ (e: 'ai-generate'): void;
+ (e: 'update:modelValue', value: string): void;
+}>();
+
+const inputText = ref<string>(props.modelValue || '');
+
+watch(() => props.modelValue, (val) => {
+ inputText.value = val || '';
+});
+
+const submit = (): void => {
  if (!inputText.value.trim()) return;
  emit('submitted', inputText.value);
+ emit('update:modelValue', '');
  inputText.value = '';
 };
 
-const generateText = async () => {
- const res = await fetch('http://127.0.0.1:8000/ai/generate-text');
- if (res.ok) {
-  const data = await res.json();
-  inputText.value = data.text;
-  emit('generated', data.text);
- }
+const generateText = (): void => {
+ emit('ai-generate');
 };
 </script>
+
+<style scoped>
+/* optional styles */
+</style>

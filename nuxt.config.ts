@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
- modules: ['usebootstrap', '@nuxt/eslint', '@pinia/nuxt', 'bootstrap-vue-3/nuxt'], devtools: { enabled: false },
+ modules: ['usebootstrap', '@nuxt/eslint', '@pinia/nuxt'], devtools: { enabled: false },
  css: [
   './assets/scss/custom.scss',
  ],

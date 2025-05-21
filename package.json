@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.0",
-    "bootstrap": "^5.3.6",
-    "bootstrap-vue-3": "^0.5.1",
     "pinia": "^3.0.2",
     "sass": "1.77.6",
     "usebootstrap": "^3.5.107",
