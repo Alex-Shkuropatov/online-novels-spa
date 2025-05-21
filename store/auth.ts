@@ -91,7 +91,6 @@ export const useAuthStore = defineStore('auth', {
      headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${this.accessToken}`,
-
      },
     },
    );
